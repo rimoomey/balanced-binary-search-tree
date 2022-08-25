@@ -4,7 +4,7 @@ require_relative 'node'
 
 # Class for a balanced binary search tree
 class Tree
-  attr_accessor :root
+  attr_reader :root
 
   def initialize(array)
     @root = build_tree(array, 0, array.length - 1)
@@ -22,6 +22,45 @@ class Tree
     node
   end
 
+  def delete(key, node = @root)
+    return if node.left.nil? && node.right.nil?
+
+    if key == node.left.value
+      if node.left.left.nil? && node.left.right.nil?
+        node.left = nil
+      elsif node.left.left.nil?
+        node.left = node.left.right
+      elsif node.left.right.nil?
+        node.left = node.left.left
+      else
+        successor = inorder_successor(node.left)
+        successor.left = node.left.left
+        node.left.right.left = nil
+        successor.right = node.left.right
+        node.left = successor
+      end
+    elsif key == node.right.value
+      if node.right.left.nil? && node.right.right.nil?
+        node.right = nil
+      elsif node.right.left.nil?
+        node.right = node.right.right
+      elsif node.right.right.nil?
+        node.right = node.right.left
+      else
+        successor = inorder_successor(node.right)
+        successor.left = node.right.left
+        node.right.right.left = nil
+        successor.right = node.right.right
+        node.right = successor
+      end
+    elsif key < node.value
+      delete(key, node.left)
+    else
+      delete(key, node.right)
+    end
+    nil
+  end
+
   def inorder_successor(node = @root)
     unless node.right.nil?
       right_subtree = node.right
@@ -32,7 +71,7 @@ class Tree
 
   def minimum_value(node = @root)
     return nil if node.nil?
-    return node.value if node.left.nil?
+    return node if node.left.nil?
 
     minimum_value(node.left)
   end
@@ -58,7 +97,12 @@ class Tree
   end
 end
 
-tree = Tree.new([-8, -7, -6, -5, -4, -3, -2, -1, 1, 3, 4, 6])
+tree = Tree.new([-10, -9, -8, -7, -6, -5, -3, -2.5, -2.25, -2, -1, 1, 3, 4, 6])
 tree.pretty_print
 puts tree.minimum_value
-puts tree.inorder_successor(tree.root.right)
+puts tree.inorder_successor(tree.root.left)
+tree.pretty_print
+tree.delete(1)
+tree.delete(4)
+tree.delete(-2.25)
+tree.pretty_print
