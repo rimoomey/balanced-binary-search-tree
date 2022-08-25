@@ -5,7 +5,7 @@ class Node
   include Comparable
   attr_accessor :value, :left, :right
 
-  def initalize(value = nil, left = nil, right = nil)
+  def initialize(value = nil, left = nil, right = nil)
     @value = value
     @left = left
     @right = right
@@ -17,9 +17,3 @@ class Node
 end
 
 node1 = Node.new(5)
-node2 = Node.new(6)
-node3 = Node.new(5.5)
-
-puts node1 > node2
-puts node2 > node1
-puts node3.between?(node1, node2)
