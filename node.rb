@@ -17,3 +17,9 @@ class Node
 end
 
 node1 = Node.new(5)
+node2 = Node.new(6)
+node3 = Node.new(7)
+
+puts node1 > node2
+puts node2 > node1
+puts node3.between?(node1, node2)
