@@ -201,25 +201,3 @@ end
 tree_array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 tree = Tree.new(tree_array)
-tree.pretty_print
-tree.delete(1)
-tree.pretty_print
-tree.insert(1)
-tree.pretty_print
-puts tree.find(5)
-
-sum = 0
-tree.inorder do |element|
-  sum += element.value
-end
-puts sum
-sum = 0
-tree.preorder do |element|
-  sum += element.value
-end
-puts sum
-sum = 0
-tree.postorder do |element|
-  sum += element.value
-end
-puts sum
