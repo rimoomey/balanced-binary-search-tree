@@ -81,6 +81,61 @@ class Tree
     end
   end
 
+  def inorder(node = @root, &operation)
+    if block_given?
+      return if node.nil?
+
+      inorder(node.left, &operation)
+      yield node
+      inorder(node.right, &operation)
+    else
+      return [] if node.nil?
+
+      array_to_pass = []
+      array_to_pass += inorder(node.left)
+      array_to_pass.push(node.value)
+      array_to_pass += inorder(node.right)
+      array_to_pass
+    end
+  end
+
+  def preorder(node = @root, &operation)
+    # parent to left to right
+    if block_given?
+      return if node.nil?
+
+      yield node
+      preorder(node.left, &operation)
+      preorder(node.right, &operation)
+    else
+      return [] if node.nil?
+
+      array_to_pass = []
+      array_to_pass.push(node.value)
+      array_to_pass += preorder(node.left)
+      array_to_pass += preorder(node.right)
+      array_to_pass
+    end
+  end
+
+  def postorder(node = @root, &operation)
+    if block_given?
+      return if node.nil?
+
+      postorder(node.left, &operation)
+      postorder(node.right, &operation)
+      yield node
+    else
+      return [] if node.nil?
+
+      array_to_pass = []
+      array_to_pass += postorder(node.left)
+      array_to_pass += postorder(node.right)
+      array_to_pass.push(node.value)
+      array_to_pass
+    end
+  end
+
   def execute_block(queue = [@root], &operation)
     new_queue = []
     queue.each do |element|
@@ -154,10 +209,17 @@ tree.pretty_print
 puts tree.find(5)
 
 sum = 0
-tree.level_order do |element|
+tree.inorder do |element|
   sum += element.value
-  puts sum
 end
-
-tree_array_returned = tree.level_order
-p tree_array_returned.sort
+puts sum
+sum = 0
+tree.preorder do |element|
+  sum += element.value
+end
+puts sum
+sum = 0
+tree.postorder do |element|
+  sum += element.value
+end
+puts sum
