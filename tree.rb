@@ -101,6 +101,26 @@ class Tree
     end
   end
 
+  def balanced?(node = @root)
+    return true if node.nil?
+
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    return false if left_height > right_height + 1
+    return false if right_height > left_height + 1
+
+    balanced?(node.left)
+    balanced?(node.right)
+  end
+
+  def rebalance(node = @root)
+    array = to_a
+    array = array.sort
+
+    Tree.new(array)
+  end
+
   def inorder(node = @root, &operation)
     if block_given?
       return if node.nil?
@@ -219,15 +239,30 @@ class Tree
 end
 
 tree_array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+tree3 = Tree.new(tree_array)
+tree3.pretty_print
+puts ' '
+puts "Balanced? : #{tree3.balanced?}"
+puts ' '
 
-tree = Tree.new(tree_array)
-tree.insert(11)
-tree.insert(12)
-tree.pretty_print
-puts "Breadth-first: #{tree.level_order}"
-puts "Inorder: #{tree.inorder}"
-puts "Preorder: #{tree.preorder}"
-puts "Postorder: #{tree.postorder}"
-puts "Height: #{tree.height}"
-puts "Depth of 12: #{tree.depth(12)}"
-puts "Depth of 7: #{tree.depth(7)}"
+puts "Unbalancing tree..."
+puts ' '
+sleep(2)
+
+tree3.insert(2.5)
+tree3.insert(2.25)
+tree3.insert(2.15)
+tree3.pretty_print
+puts ' '
+
+puts "Balanced? : #{tree3.balanced?}"
+puts ' '
+
+puts 'Run rebalance...'
+puts ' '
+sleep(2)
+
+tree3 = tree3.rebalance
+tree3.pretty_print
+puts ' '
+puts "Balanced? : #{tree3.balanced?}"
