@@ -61,6 +61,18 @@ class Tree
     nil
   end
 
+  def find(key, node = @root)
+    return if node.nil?
+
+    if key < node.value
+      find(key, node.left)
+    elsif key > node.value
+      find(key, node.right)
+    else
+      node
+    end
+  end
+
   def inorder_successor(node = @root)
     unless node.right.nil?
       right_subtree = node.right
@@ -99,10 +111,8 @@ end
 
 tree = Tree.new([-10, -9, -8, -7, -6, -5, -3, -2.5, -2.25, -2, -1, 1, 3, 4, 6])
 tree.pretty_print
-puts tree.minimum_value
-puts tree.inorder_successor(tree.root.left)
-tree.pretty_print
 tree.delete(1)
-tree.delete(4)
-tree.delete(-2.25)
 tree.pretty_print
+tree.insert(1)
+tree.pretty_print
+puts tree.find(-7)
