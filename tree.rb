@@ -73,6 +73,17 @@ class Tree
     end
   end
 
+  def depth(key, node = @root, depth = 1)
+    return 0 if node.nil?
+    return depth if key == node.value
+
+    if key < node.value
+      depth(key, node.left, depth + 1)
+    else
+      depth(key, node.right, depth + 1)
+    end
+  end
+
   def height(node = @root)
     return 0 if node.nil?
 
@@ -218,3 +229,5 @@ puts "Inorder: #{tree.inorder}"
 puts "Preorder: #{tree.preorder}"
 puts "Postorder: #{tree.postorder}"
 puts "Height: #{tree.height}"
+puts "Depth of 12: #{tree.depth(12)}"
+puts "Depth of 7: #{tree.depth(7)}"
