@@ -25,7 +25,7 @@ class Tree
   def delete(key, node = @root)
     return if node.left.nil? && node.right.nil?
 
-    if key == node.left.value
+    if !node.left.nil? && key == node.left.value
       if node.left.left.nil? && node.left.right.nil?
         node.left = nil
       elsif node.left.left.nil?
@@ -74,6 +74,14 @@ class Tree
   end
 
   def level_order(queue = [@root], &operation)
+    if block_given?
+      execute_block(queue, &operation)
+    else
+      to_a(queue)
+    end
+  end
+
+  def execute_block(queue = [@root], &operation)
     new_queue = []
     queue.each do |element|
       next if element.nil?
@@ -82,7 +90,21 @@ class Tree
       new_queue.push(element.left)
       new_queue.push(element.right)
     end
-    level_order(new_queue, &operation) unless new_queue.empty?
+    execute_block(new_queue, &operation) unless new_queue.empty?
+  end
+
+  def to_a(queue = [@root])
+    new_queue = []
+    stored_values = []
+    queue.each do |element|
+      next if element.nil?
+
+      stored_values.push(element.value)
+      new_queue.push(element.left)
+      new_queue.push(element.right)
+    end
+    stored_values += level_order(new_queue) unless new_queue.empty?
+    stored_values
   end
 
   def inorder_successor(node = @root)
@@ -121,11 +143,21 @@ class Tree
   end
 end
 
-tree = Tree.new([-10, -9, -8, -7, -6, -5, -3, -2.5, -2.25, -2, -1, 1, 3, 4, 6])
+tree_array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+tree = Tree.new(tree_array)
 tree.pretty_print
 tree.delete(1)
 tree.pretty_print
 tree.insert(1)
 tree.pretty_print
-puts tree.find(-7)
-tree.level_order { |element| puts element.value }
+puts tree.find(5)
+
+sum = 0
+tree.level_order do |element|
+  sum += element.value
+  puts sum
+end
+
+tree_array_returned = tree.level_order
+p tree_array_returned.sort
