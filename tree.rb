@@ -73,6 +73,18 @@ class Tree
     end
   end
 
+  def level_order(queue = [@root], &operation)
+    new_queue = []
+    queue.each do |element|
+      next if element.nil?
+
+      yield element
+      new_queue.push(element.left)
+      new_queue.push(element.right)
+    end
+    level_order(new_queue, &operation) unless new_queue.empty?
+  end
+
   def inorder_successor(node = @root)
     unless node.right.nil?
       right_subtree = node.right
@@ -116,3 +128,4 @@ tree.pretty_print
 tree.insert(1)
 tree.pretty_print
 puts tree.find(-7)
+tree.level_order { |element| puts element.value }
