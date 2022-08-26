@@ -73,6 +73,15 @@ class Tree
     end
   end
 
+  def height(node = @root)
+    return 0 if node.nil?
+
+    left = height(node.left)
+    right = height(node.right)
+
+    1 + (left > right ? left : right)
+  end
+
   def level_order(queue = [@root], &operation)
     if block_given?
       execute_block(queue, &operation)
@@ -201,3 +210,11 @@ end
 tree_array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 tree = Tree.new(tree_array)
+tree.insert(11)
+tree.insert(12)
+tree.pretty_print
+puts "Breadth-first: #{tree.level_order}"
+puts "Inorder: #{tree.inorder}"
+puts "Preorder: #{tree.preorder}"
+puts "Postorder: #{tree.postorder}"
+puts "Height: #{tree.height}"
